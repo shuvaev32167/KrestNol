@@ -23,9 +23,25 @@ namespace KrestNol
                 return null;
             int[] value = new int[2];
             string[] buf = input.Split(' ');
-            Int32.TryParse(buf.First(), out value[0]);
-            Int32.TryParse(buf.Last(), out value[1]);
-            return value;
+            if (Int32.TryParse(buf.First(), out value[0]))
+            {
+                Int32.TryParse(buf.Last(), out value[1]);
+                return value;
+            }
+            switch (buf.First())
+            {
+                case "save":
+                case "Save":
+                case "SAVE":
+                    break;
+                case "load":
+                case "Load":
+                case "LOAD":
+                    break;
+                default:
+                    break;
+            }
+            return null;
         }
     }
 }
