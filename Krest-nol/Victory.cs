@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace KrestNol
 {
@@ -11,9 +6,9 @@ namespace KrestNol
     {
         public Victory(Game g)
         {
-            game = g;
+            _game = g;
         }
-        private Game game;
+        private readonly Game _game;
         public int ZapolnenostyPole { get; set; }
         public bool IsVictory;
         public bool IsVictoryPlayer;
@@ -23,11 +18,11 @@ namespace KrestNol
             ++ZapolnenostyPole;
             
             int povtor = 1;
-            for (int i = pos.Last()+1; i < game.SizePoleX; ++i)
+            for (int i = pos.Last()+1; i < _game.SizePoleX; ++i)
             {
-                if (game.Pole[pos.First()][i] == game.Pole[pos.First()][pos.Last()])
+                if (_game.Pole[pos.First()][i] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= game.VRyd)
+                if (povtor >= _game.VRyd)
                 {
                     IsVictory = true;
                     IsVictoryPlayer = true;
@@ -36,9 +31,9 @@ namespace KrestNol
             }
             for (int i = pos.Last()-1; i >= 0; --i)
             {
-                if (game.Pole[pos.First()][i] == game.Pole[pos.First()][pos.Last()])
+                if (_game.Pole[pos.First()][i] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= game.VRyd)
+                if (povtor >= _game.VRyd)
                 {
                     IsVictory = true;
                     IsVictoryPlayer = true;
@@ -47,11 +42,11 @@ namespace KrestNol
             }
             
             povtor = 1;
-            for (int i = pos.First()+1; i < game.SizePoleY; ++i)
+            for (int i = pos.First()+1; i < _game.SizePoleY; ++i)
             {
-                if (game.Pole[i][pos.Last()] == game.Pole[pos.First()][pos.Last()])
+                if (_game.Pole[i][pos.Last()] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= game.VRyd)
+                if (povtor >= _game.VRyd)
                 {
                     IsVictory = true;
                     IsVictoryPlayer = true;
@@ -60,9 +55,9 @@ namespace KrestNol
             }
             for (int i = pos.First()-1; i >= 0; --i)
             {
-                if (game.Pole[i][pos.Last()] == game.Pole[pos.First()][pos.Last()])
+                if (_game.Pole[i][pos.Last()] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= game.VRyd)
+                if (povtor >= _game.VRyd)
                 {
                     IsVictory = true;
                     IsVictoryPlayer = true;
@@ -71,11 +66,11 @@ namespace KrestNol
             }
             
             povtor = 1;
-            for (int i = pos.First()+1, j = pos.Last()+1; i < game.SizePoleY && j < game.SizePoleX; ++i, ++j)
+            for (int i = pos.First()+1, j = pos.Last()+1; i < _game.SizePoleY && j < _game.SizePoleX; ++i, ++j)
             {
-                if (game.Pole[i][j] == game.Pole[pos.First()][pos.Last()])
+                if (_game.Pole[i][j] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= game.VRyd)
+                if (povtor >= _game.VRyd)
                 {
                     IsVictory = true;
                     IsVictoryPlayer = true;
@@ -84,9 +79,9 @@ namespace KrestNol
             }
             for (int i = pos.First()-1, j = pos.Last()-1; i >= 0 && j >= 0; --i, --j)
             {
-                if (game.Pole[i][j] == game.Pole[pos.First()][pos.Last()])
+                if (_game.Pole[i][j] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= game.VRyd)
+                if (povtor >= _game.VRyd)
                 {
                     IsVictory = true;
                     IsVictoryPlayer = true;
@@ -95,29 +90,29 @@ namespace KrestNol
             }
             
             povtor = 1;
-            for (int i = pos.First()+1, j = pos.Last()-1; i < game.SizePoleY && j >= 0; ++i, --j)
+            for (int i = pos.First()+1, j = pos.Last()-1; i < _game.SizePoleY && j >= 0; ++i, --j)
             {
-                if (game.Pole[i][j] == game.Pole[pos.First()][pos.Last()])
+                if (_game.Pole[i][j] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= game.VRyd)
+                if (povtor >= _game.VRyd)
                 {
                     IsVictory = true;
                     IsVictoryPlayer = true;
                     return;
                 }
             }
-            for (int i = pos.First()-1, j = pos.Last()+1; i >= 0 && j < game.SizePoleX; --i, ++j)
+            for (int i = pos.First()-1, j = pos.Last()+1; i >= 0 && j < _game.SizePoleX; --i, ++j)
             {
-                if (game.Pole[i][j] == game.Pole[pos.First()][pos.Last()])
+                if (_game.Pole[i][j] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= game.VRyd)
+                if (povtor >= _game.VRyd)
                 {
                     IsVictory = true;
                     IsVictoryPlayer = true;
                     return;
                 }
             }
-            if (game.SizePole == ZapolnenostyPole)
+            if (_game.SizePole == ZapolnenostyPole)
             {
                 IsVictory = true;
                 IsVictoryPlayer = false;

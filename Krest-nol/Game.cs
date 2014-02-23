@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KrestNol
 {
@@ -21,6 +16,8 @@ namespace KrestNol
                 int bufValue = value;
                 if (bufValue >= SizePlayer)
                     bufValue -= SizePlayer;
+                if (bufValue < 0)
+                    bufValue += SizePlayer;
                 countPlayer = bufValue+48;
             }
         }
@@ -37,14 +34,14 @@ namespace KrestNol
         {
             Console.Write("Введите размер поля: ");
             int[] arSize = Vvod.ConvertArrInt(Console.ReadLine());
-            while (arSize.First() < 1 || arSize.First() > 10 || arSize.Last() < 1 || arSize.Last() > 10)
+            while (arSize.First() < 2 || arSize.First() > 10 || arSize.Last() < 2 || arSize.Last() > 10)
             {
                 Console.WriteLine("Не верные размеры поля");
                 arSize = Vvod.ConvertArrInt(Console.ReadLine());
             }
             Console.Write("Введите число повторений в ряду: ");
             VRyd = Vvod.ConvertInt(Console.ReadLine());
-            while (VRyd < 1 || (VRyd > arSize.First() || VRyd > arSize.Last()))
+            while (VRyd < 2 || (VRyd > arSize.First() || VRyd > arSize.Last()))
             {
                 Console.WriteLine("Не верное число повторений");
                 VRyd = Vvod.ConvertInt(Console.ReadLine());
@@ -73,7 +70,9 @@ namespace KrestNol
         }
 
         public void LoadGame()
-        { }
+        {
+            StartGame();
+        }
 
         public void StartGame()
         {
@@ -97,11 +96,22 @@ namespace KrestNol
                 }
                 Console.WriteLine("Ходит " + CountPlayer.ToString() + " игрок");
                 pos = Vvod.ConvertArrInt(Console.ReadLine());
+                while (pos.First() < 0 || pos.First() >= SizePoleY || pos.Last() < 0 || pos.Last() >= SizePoleX)
+                {
+                    Console.WriteLine("Не верные координаты");
+                    pos = Vvod.ConvertArrInt(Console.ReadLine());
+                }
+                while (Pole[pos.First()][pos.Last()] != ' ')
+                {
+                    Console.WriteLine("Ячейка занята");
+                    pos = Vvod.ConvertArrInt(Console.ReadLine());
+                }
                 Pole[pos.First()][pos.Last()] = (char)countPlayer;
                 victory.CalculateVictory(pos);
+                CountPlayer++;
             } while (!victory.IsVictory);
             if (victory.IsVictoryPlayer)
-                Console.WriteLine("Попедил игрок №"+CountPlayer.ToString());
+                Console.WriteLine("Попедил игрок №"+(CountPlayer-1).ToString());
             else
                 Console.WriteLine("Нечья");
         }
