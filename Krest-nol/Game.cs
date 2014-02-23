@@ -31,12 +31,31 @@ namespace KrestNol
 
         public char[][] Pole { get; set; }
 
+        public int VRyd { get; set; }
+
         public void NewGame()
         {
-            Console.Write("Введите число игроков: ");
-            SizePlayer = Vvod.ConvertInt(Console.ReadLine());
             Console.Write("Введите размер поля: ");
             int[] arSize = Vvod.ConvertArrInt(Console.ReadLine());
+            while (arSize.First() < 1 || arSize.First() > 10 || arSize.Last() < 1 || arSize.Last() > 10)
+            {
+                Console.WriteLine("Не верные размеры поля");
+                arSize = Vvod.ConvertArrInt(Console.ReadLine());
+            }
+            Console.Write("Введите число повторений в ряду: ");
+            VRyd = Vvod.ConvertInt(Console.ReadLine());
+            while (VRyd < 1 || (VRyd > arSize.First() || VRyd > arSize.Last()))
+            {
+                Console.WriteLine("Не верное число повторений");
+                VRyd = Vvod.ConvertInt(Console.ReadLine());
+            }
+            Console.Write("Введите число игроков: ");
+            SizePlayer = Vvod.ConvertInt(Console.ReadLine());
+            while (SizePlayer < 1 || (SizePlayer > arSize.First() || SizePlayer > arSize.Last()))
+            {
+                Console.WriteLine("Не верное число игроков");
+                SizePlayer = Vvod.ConvertInt(Console.ReadLine());
+            }
             if (arSize != null)
             {
                 SizePoleX = arSize.First();
@@ -62,17 +81,24 @@ namespace KrestNol
             Victory victory = new Victory(this);
             do
             {
-                Process.Start("clr");
+                Console.Clear();
+                for (int j = 0; j < SizePoleX; ++j)
+                    Console.Write(" -");
+                Console.WriteLine();
                 for (int i = 0; i < SizePoleY; ++i)
                 {
+                    Console.Write('|');
                     for (int j = 0; j < SizePoleX; ++j)
                         Console.Write(Pole[i][j] + "|");
+                    Console.WriteLine();
+                    for (int j = 0; j < SizePoleX; ++j)
+                        Console.Write(" -");
                     Console.WriteLine();
                 }
                 Console.WriteLine("Ходит " + CountPlayer.ToString() + " игрок");
                 pos = Vvod.ConvertArrInt(Console.ReadLine());
+                Pole[pos.First()][pos.Last()] = (char)countPlayer;
                 victory.CalculateVictory(pos);
-                Pole[pos.First()][pos.Last()]=(char)countPlayer;
             } while (!victory.IsVictory);
             if (victory.IsVictoryPlayer)
                 Console.WriteLine("Попедил игрок №"+CountPlayer.ToString());

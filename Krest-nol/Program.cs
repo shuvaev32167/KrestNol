@@ -13,7 +13,7 @@ namespace KrestNol
         {
             Game game = new Game();
             game.NewGame();
-            Process.Start("pause");
+            Console.ReadLine();
         }
     }
 }
