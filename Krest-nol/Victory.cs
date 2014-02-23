@@ -8,7 +8,16 @@ namespace KrestNol
 {
     public class Victory
     {
-        public bool CalculateVictory()
+        public Victory(Game g)
+        {
+            game = g;
+        }
+        private Game game;
+        public int ZapolnenostyPole { get; set; }
+        public bool IsVictory;
+        public bool IsVictoryPlayer;
+
+        public bool CalculateVictory(int [] pos)
         {
             return false;
         }
