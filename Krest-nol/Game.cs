@@ -1,13 +1,30 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Mime;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace KrestNol
 {
-    public class Game
+    [JsonObject(MemberSerialization.OptIn)]
+    [JsonConverter(typeof(Game))]
+    public class Game : CustomCreationConverter<Game>
     {
+    public override Game Create(Type objectType)
+    {
+        return new Game();
+    }
+        private Vvod vvod;
+
+        public Game()
+        {
+            vvod = new Vvod(this);
+        }
+        [JsonProperty]
         public int SizePlayer { get; set; }
         private int countPlayer;
 
+        [JsonProperty]
         private int CountPlayer
         {
             get { return countPlayer-48; }
@@ -22,36 +39,41 @@ namespace KrestNol
             }
         }
 
+        [JsonProperty]
         public int SizePoleX { get; set; }
+        [JsonProperty]
         public int SizePoleY { get; set; }
+        [JsonProperty]
         public int SizePole { get; set; }
 
+        [JsonProperty]
         public char[][] Pole { get; set; }
 
+        [JsonProperty]
         public int VRyd { get; set; }
 
         public void NewGame()
         {
             Console.Write("Введите размер поля: ");
-            int[] arSize = Vvod.ConvertArrInt(Console.ReadLine());
+            int[] arSize = vvod.ConvertArrInt(Console.ReadLine());
             while (arSize.First() < 2 || arSize.First() > 10 || arSize.Last() < 2 || arSize.Last() > 10)
             {
                 Console.WriteLine("Не верные размеры поля");
-                arSize = Vvod.ConvertArrInt(Console.ReadLine());
+                arSize = vvod.ConvertArrInt(Console.ReadLine());
             }
             Console.Write("Введите число повторений в ряду: ");
-            VRyd = Vvod.ConvertInt(Console.ReadLine());
+            VRyd = vvod.ConvertInt(Console.ReadLine());
             while (VRyd < 2 || (VRyd > arSize.First() || VRyd > arSize.Last()))
             {
                 Console.WriteLine("Не верное число повторений");
-                VRyd = Vvod.ConvertInt(Console.ReadLine());
+                VRyd = vvod.ConvertInt(Console.ReadLine());
             }
             Console.Write("Введите число игроков: ");
-            SizePlayer = Vvod.ConvertInt(Console.ReadLine());
-            while (SizePlayer < 1 || (SizePlayer > arSize.First() || SizePlayer > arSize.Last()))
+            SizePlayer = vvod.ConvertInt(Console.ReadLine());
+            while (SizePlayer < 1 || (SizePlayer > arSize.First() * arSize.Last() / VRyd))
             {
                 Console.WriteLine("Не верное число игроков");
-                SizePlayer = Vvod.ConvertInt(Console.ReadLine());
+                SizePlayer = vvod.ConvertInt(Console.ReadLine());
             }
             if (arSize != null)
             {
@@ -95,16 +117,16 @@ namespace KrestNol
                     Console.WriteLine();
                 }
                 Console.WriteLine("Ходит " + CountPlayer.ToString() + " игрок");
-                pos = Vvod.ConvertArrInt(Console.ReadLine());
+                pos = vvod.ConvertArrInt(Console.ReadLine());
                 while (pos.First() < 0 || pos.First() >= SizePoleY || pos.Last() < 0 || pos.Last() >= SizePoleX)
                 {
                     Console.WriteLine("Не верные координаты");
-                    pos = Vvod.ConvertArrInt(Console.ReadLine());
+                    pos = vvod.ConvertArrInt(Console.ReadLine());
                 }
                 while (Pole[pos.First()][pos.Last()] != ' ')
                 {
                     Console.WriteLine("Ячейка занята");
-                    pos = Vvod.ConvertArrInt(Console.ReadLine());
+                    pos = vvod.ConvertArrInt(Console.ReadLine());
                 }
                 Pole[pos.First()][pos.Last()] = (char)countPlayer;
                 victory.CalculateVictory(pos);
@@ -114,6 +136,8 @@ namespace KrestNol
                 Console.WriteLine("Попедил игрок №"+(CountPlayer-1).ToString());
             else
                 Console.WriteLine("Нечья");
+            Console.ReadLine();
+            Environment.Exit(0);
         }
     }
 }

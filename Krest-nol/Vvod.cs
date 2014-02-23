@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,13 @@ namespace KrestNol
 {
     public class Vvod
     {
-        public static int ConvertInt(string input)
+        private Game _game;
+
+        public Vvod(Game g)
+        {
+            _game = g;
+        }
+        public int ConvertInt(string input)
         {
             if (input.Split(' ').Count() == 1)
             {
@@ -21,10 +28,13 @@ namespace KrestNol
                 case "save":
                 case "Save":
                 case "SAVE":
+                    ExternalFile.Save(input.Split(' ').Last(), _game);
                     break;
                 case "load":
                 case "Load":
                 case "LOAD":
+                    ExternalFile.Load(input.Split(' ').Last(), ref _game);
+                    _game.LoadGame();
                     break;
                 default:
                     break;
@@ -32,7 +42,7 @@ namespace KrestNol
             return 0;
         }
 
-        public static int[] ConvertArrInt(string input)
+        public int[] ConvertArrInt(string input)
         {
             if (input.Split(' ').Count() != 2) 
                 return null;
@@ -48,15 +58,20 @@ namespace KrestNol
                 case "save":
                 case "Save":
                 case "SAVE":
+                    ExternalFile.Save(buf.Last(), _game);
                     break;
                 case "load":
                 case "Load":
                 case "LOAD":
+                    ExternalFile.Load(input.Split(' ').Last(), ref _game);
+                    _game.LoadGame();
                     break;
                 default:
                     break;
             }
-            return null;
+            value[0] = -1;
+            value[1] = -1;
+            return value;
         }
     }
 }
