@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KrestNol
 {
@@ -19,7 +15,7 @@ namespace KrestNol
         {
             if (input.Split(' ').Count() == 1)
             {
-                int value = 0;
+                int value;
                 Int32.TryParse(input, out value);
                 return value;
             }
@@ -35,8 +31,6 @@ namespace KrestNol
                 case "LOAD":
                     ExternalFile.Load(input.Split(' ').Last(), ref _game);
                     _game.LoadGame();
-                    break;
-                default:
                     break;
             }
             return 0;
@@ -66,11 +60,7 @@ namespace KrestNol
                     ExternalFile.Load(input.Split(' ').Last(), ref _game);
                     _game.LoadGame();
                     break;
-                default:
-                    break;
             }
-            //value[0] = -1;
-            //value[1] = -1;
             return null;
         }
     }

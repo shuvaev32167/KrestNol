@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.IO;
 
@@ -12,25 +8,17 @@ namespace KrestNol
     {
         public static void Save(string put, Game data)
         {
-            JsonSerializer ser = new JsonSerializer();
             FileStream fs = File.Create(put);
-            {
-                //fs.Close();
-                //fs = File.OpenWrite(put);
-                string s = JsonConvert.SerializeObject(data);
-                StreamWriter stream = new StreamWriter(fs);
-                stream.Write(s);
-                stream.Close();
-                //TextWriter tw = new StreamWriter(fs);
-                //ser.Serialize(tw, data);
-                //Console.ReadLine();
-                fs.Close();
-            }
+            string s = JsonConvert.SerializeObject(data);
+            StreamWriter stream = new StreamWriter(fs);
+            stream.Write(s);
+            stream.Close();
+            fs.Close();
         }
 
         public static void Load(string put, ref Game data)
         {
-            JsonSerializer ser = new JsonSerializer();
+            if (data == null) throw new ArgumentNullException("data");
             using (FileStream fs = File.OpenRead(put))
             {
                 StreamReader streamReader = new StreamReader(fs);

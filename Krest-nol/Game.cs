@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
-using System.Net.Mime;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -14,23 +14,23 @@ namespace KrestNol
         {
             return new Game();
         }
-        private Vvod vvod;
+        private readonly Vvod _vvod;
 
-        private Victory victory;
+        private readonly Victory _victory;
 
         public Game()
         {
-            vvod = new Vvod(this);
-            victory = new Victory(this);
+            _vvod = new Vvod(this);
+            _victory = new Victory(this);
         }
         [JsonProperty]
         public int SizePlayer { get; set; }
-        private int countPlayer;
+        private int _countPlayer;
 
         [JsonProperty]
         private int CountPlayer
         {
-            get { return countPlayer - 48; }
+            get { return _countPlayer - 48; }
             set
             {
                 int bufValue = value;
@@ -38,7 +38,7 @@ namespace KrestNol
                     bufValue -= SizePlayer;
                 if (bufValue < 0)
                     bufValue += SizePlayer;
-                countPlayer = bufValue + 48;
+                _countPlayer = bufValue + 48;
             }
         }
 
@@ -58,25 +58,25 @@ namespace KrestNol
         public void NewGame()
         {
             Console.Write("Введите размер поля: ");
-            int[] arSize = vvod.ConvertArrInt(Console.ReadLine());
+            int[] arSize = _vvod.ConvertArrInt(Console.ReadLine());
             while (arSize.First() < 2 || arSize.First() > 10 || arSize.Last() < 2 || arSize.Last() > 10)
             {
                 Console.WriteLine("Не верные размеры поля");
-                arSize = vvod.ConvertArrInt(Console.ReadLine());
+                arSize = _vvod.ConvertArrInt(Console.ReadLine());
             }
             Console.Write("Введите число повторений в ряду: ");
-            VRyd = vvod.ConvertInt(Console.ReadLine());
+            VRyd = _vvod.ConvertInt(Console.ReadLine());
             while (VRyd < 2 || (VRyd > arSize.First() || VRyd > arSize.Last()))
             {
                 Console.WriteLine("Не верное число повторений");
-                VRyd = vvod.ConvertInt(Console.ReadLine());
+                VRyd = _vvod.ConvertInt(Console.ReadLine());
             }
             Console.Write("Введите число игроков: ");
-            SizePlayer = vvod.ConvertInt(Console.ReadLine());
+            SizePlayer = _vvod.ConvertInt(Console.ReadLine());
             while (SizePlayer < 1 || (SizePlayer > arSize.First() * arSize.Last() / VRyd))
             {
                 Console.WriteLine("Не верное число игроков");
-                SizePlayer = vvod.ConvertInt(Console.ReadLine());
+                SizePlayer = _vvod.ConvertInt(Console.ReadLine());
             }
             if (arSize != null)
             {
@@ -101,7 +101,7 @@ namespace KrestNol
                 for (int j = 0; j < SizePoleX; ++j)
                     if (Pole[i][j] != ' ')
                         ++zapolPole;
-            victory.ZapolnenostyPole = zapolPole;
+            _victory.ZapolnenostyPole = zapolPole;
             StartGame();
         }
 
@@ -111,26 +111,26 @@ namespace KrestNol
             do
             {
                 DisplayPole();
-                Console.WriteLine("Ходит " + CountPlayer.ToString() + " игрок");
-                pos = vvod.ConvertArrInt(Console.ReadLine());
+                Console.WriteLine("Ходит игрок " + CountPlayer.ToString(CultureInfo.InvariantCulture));
+                pos = _vvod.ConvertArrInt(Console.ReadLine());
                 while (pos == null || pos.First() < 0 || pos.First() >= SizePoleY || pos.Last() < 0 || pos.Last() >= SizePoleX)
                 {
                     if (pos != null)
                         Console.WriteLine("Не верные координаты");
-                    pos = vvod.ConvertArrInt(Console.ReadLine());
+                    pos = _vvod.ConvertArrInt(Console.ReadLine());
                 }
                 while (Pole[pos.First()][pos.Last()] != ' ')
                 {
                     Console.WriteLine("Ячейка занята");
-                    pos = vvod.ConvertArrInt(Console.ReadLine());
+                    pos = _vvod.ConvertArrInt(Console.ReadLine());
                 }
-                Pole[pos.First()][pos.Last()] = (char)countPlayer;
-                victory.CalculateVictory(pos);
+                Pole[pos.First()][pos.Last()] = (char)_countPlayer;
+                _victory.CalculateVictory(pos);
                 CountPlayer++;
-            } while (!victory.IsVictory);
+            } while (!_victory.IsVictory);
             DisplayPole();
-            if (victory.IsVictoryPlayer)
-                Console.WriteLine("Попедил игрок № " + (CountPlayer - 1).ToString());
+            if (_victory.IsVictoryPlayer)
+                Console.WriteLine("Попедил игрок № " + (CountPlayer - 1).ToString(CultureInfo.InvariantCulture));
             else
                 Console.WriteLine("Нечья");
             Console.ReadLine();
