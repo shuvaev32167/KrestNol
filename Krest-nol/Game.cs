@@ -10,15 +10,18 @@ namespace KrestNol
     [JsonConverter(typeof(Game))]
     public class Game : CustomCreationConverter<Game>
     {
-    public override Game Create(Type objectType)
-    {
-        return new Game();
-    }
+        public override Game Create(Type objectType)
+        {
+            return new Game();
+        }
         private Vvod vvod;
+
+        private Victory victory;
 
         public Game()
         {
             vvod = new Vvod(this);
+            victory = new Victory(this);
         }
         [JsonProperty]
         public int SizePlayer { get; set; }
@@ -27,7 +30,7 @@ namespace KrestNol
         [JsonProperty]
         private int CountPlayer
         {
-            get { return countPlayer-48; }
+            get { return countPlayer - 48; }
             set
             {
                 int bufValue = value;
@@ -35,7 +38,7 @@ namespace KrestNol
                     bufValue -= SizePlayer;
                 if (bufValue < 0)
                     bufValue += SizePlayer;
-                countPlayer = bufValue+48;
+                countPlayer = bufValue + 48;
             }
         }
 
@@ -79,13 +82,13 @@ namespace KrestNol
             {
                 SizePoleX = arSize.First();
                 SizePoleY = arSize.Last();
-                SizePole = SizePoleX*SizePoleY;
+                SizePole = SizePoleX * SizePoleY;
             }
             CountPlayer = 0;
             Pole = new char[SizePoleY][];
-            for (int i =0; i < SizePoleY; ++i)
+            for (int i = 0; i < SizePoleY; ++i)
                 Pole[i] = new char[SizePoleX];
-            for (int i =0; i < SizePoleY; ++i)
+            for (int i = 0; i < SizePoleY; ++i)
                 for (int j = 0; j < SizePoleX; ++j)
                     Pole[i][j] = ' ';
             StartGame();
@@ -93,34 +96,27 @@ namespace KrestNol
 
         public void LoadGame()
         {
+            int zapolPole = 0;
+            for (int i = 0; i < SizePoleY; ++i)
+                for (int j = 0; j < SizePoleX; ++j)
+                    if (Pole[i][j] != ' ')
+                        ++zapolPole;
+            victory.ZapolnenostyPole = zapolPole;
             StartGame();
         }
 
         public void StartGame()
         {
             int[] pos;
-            Victory victory = new Victory(this);
             do
             {
-                Console.Clear();
-                for (int j = 0; j < SizePoleX; ++j)
-                    Console.Write(" -");
-                Console.WriteLine();
-                for (int i = 0; i < SizePoleY; ++i)
-                {
-                    Console.Write('|');
-                    for (int j = 0; j < SizePoleX; ++j)
-                        Console.Write(Pole[i][j] + "|");
-                    Console.WriteLine();
-                    for (int j = 0; j < SizePoleX; ++j)
-                        Console.Write(" -");
-                    Console.WriteLine();
-                }
+                DisplayPole();
                 Console.WriteLine("Ходит " + CountPlayer.ToString() + " игрок");
                 pos = vvod.ConvertArrInt(Console.ReadLine());
-                while (pos.First() < 0 || pos.First() >= SizePoleY || pos.Last() < 0 || pos.Last() >= SizePoleX)
+                while (pos == null || pos.First() < 0 || pos.First() >= SizePoleY || pos.Last() < 0 || pos.Last() >= SizePoleX)
                 {
-                    Console.WriteLine("Не верные координаты");
+                    if (pos != null)
+                        Console.WriteLine("Не верные координаты");
                     pos = vvod.ConvertArrInt(Console.ReadLine());
                 }
                 while (Pole[pos.First()][pos.Last()] != ' ')
@@ -132,12 +128,31 @@ namespace KrestNol
                 victory.CalculateVictory(pos);
                 CountPlayer++;
             } while (!victory.IsVictory);
+            DisplayPole();
             if (victory.IsVictoryPlayer)
-                Console.WriteLine("Попедил игрок №"+(CountPlayer-1).ToString());
+                Console.WriteLine("Попедил игрок № " + (CountPlayer - 1).ToString());
             else
                 Console.WriteLine("Нечья");
             Console.ReadLine();
             Environment.Exit(0);
+        }
+
+        private void DisplayPole()
+        {
+            Console.Clear();
+            for (int j = 0; j < SizePoleX; ++j)
+                Console.Write(" -");
+            Console.WriteLine();
+            for (int i = 0; i < SizePoleY; ++i)
+            {
+                Console.Write('|');
+                for (int j = 0; j < SizePoleX; ++j)
+                    Console.Write(Pole[i][j] + "|");
+                Console.WriteLine();
+                for (int j = 0; j < SizePoleX; ++j)
+                    Console.Write(" -");
+                Console.WriteLine();
+            }
         }
     }
 }
