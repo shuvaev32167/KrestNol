@@ -10,6 +10,7 @@ namespace KrestNol
         }
         private readonly Game _game;
         public int ZapolnenostyPole { get; set; }
+        //TODO Переименовать Из IsVictory в IsEndOfGame
         public bool IsVictory;
         public bool IsVictoryPlayer;
 
@@ -22,23 +23,19 @@ namespace KrestNol
             {
                 if (_game.Pole[pos.First()][i] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= _game.VRyd)
-                {
-                    IsVictory = true;
-                    IsVictoryPlayer = true;
-                    return;
-                }
+                if (povtor < _game.VRyd) continue;
+                IsVictory = true;
+                IsVictoryPlayer = true;
+                return;
             }
             for (int i = pos.Last()-1; i >= 0; --i)
             {
                 if (_game.Pole[pos.First()][i] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= _game.VRyd)
-                {
-                    IsVictory = true;
-                    IsVictoryPlayer = true;
-                    return;
-                }
+                if (povtor < _game.VRyd) continue;
+                IsVictory = true;
+                IsVictoryPlayer = true;
+                return;
             }
             
             povtor = 1;
@@ -46,23 +43,19 @@ namespace KrestNol
             {
                 if (_game.Pole[i][pos.Last()] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= _game.VRyd)
-                {
-                    IsVictory = true;
-                    IsVictoryPlayer = true;
-                    return;
-                }
+                if (povtor < _game.VRyd) continue;
+                IsVictory = true;
+                IsVictoryPlayer = true;
+                return;
             }
             for (int i = pos.First()-1; i >= 0; --i)
             {
                 if (_game.Pole[i][pos.Last()] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= _game.VRyd)
-                {
-                    IsVictory = true;
-                    IsVictoryPlayer = true;
-                    return;
-                }
+                if (povtor < _game.VRyd) continue;
+                IsVictory = true;
+                IsVictoryPlayer = true;
+                return;
             }
             
             povtor = 1;
@@ -70,23 +63,19 @@ namespace KrestNol
             {
                 if (_game.Pole[i][j] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= _game.VRyd)
-                {
-                    IsVictory = true;
-                    IsVictoryPlayer = true;
-                    return;
-                }
+                if (povtor < _game.VRyd) continue;
+                IsVictory = true;
+                IsVictoryPlayer = true;
+                return;
             }
             for (int i = pos.First()-1, j = pos.Last()-1; i >= 0 && j >= 0; --i, --j)
             {
                 if (_game.Pole[i][j] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= _game.VRyd)
-                {
-                    IsVictory = true;
-                    IsVictoryPlayer = true;
-                    return;
-                }
+                if (povtor < _game.VRyd) continue;
+                IsVictory = true;
+                IsVictoryPlayer = true;
+                return;
             }
             
             povtor = 1;
@@ -94,29 +83,25 @@ namespace KrestNol
             {
                 if (_game.Pole[i][j] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= _game.VRyd)
-                {
-                    IsVictory = true;
-                    IsVictoryPlayer = true;
-                    return;
-                }
+                if (povtor < _game.VRyd) continue;
+                IsVictory = true;
+                IsVictoryPlayer = true;
+                return;
             }
+
             for (int i = pos.First()-1, j = pos.Last()+1; i >= 0 && j < _game.SizePoleX; --i, ++j)
             {
                 if (_game.Pole[i][j] == _game.Pole[pos.First()][pos.Last()])
                     ++povtor;
-                if (povtor >= _game.VRyd)
-                {
-                    IsVictory = true;
-                    IsVictoryPlayer = true;
-                    return;
-                }
-            }
-            if (_game.SizePole == ZapolnenostyPole)
-            {
+                if (povtor < _game.VRyd) continue;
                 IsVictory = true;
-                IsVictoryPlayer = false;
+                IsVictoryPlayer = true;
+                return;
             }
+           
+            if (_game.SizePole != ZapolnenostyPole) return;
+            IsVictory = true;
+            IsVictoryPlayer = false;
         }
     }
 }

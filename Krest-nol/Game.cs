@@ -7,13 +7,14 @@ using Newtonsoft.Json.Converters;
 namespace KrestNol
 {
     [JsonObject(MemberSerialization.OptIn)]
-    [JsonConverter(typeof(Game))]
+    [JsonConverter(typeof (Game))]
     public class Game : CustomCreationConverter<Game>
     {
         public override Game Create(Type objectType)
         {
             return new Game();
         }
+
         private readonly Input _input;
 
         private readonly Victory _victory;
@@ -23,8 +24,12 @@ namespace KrestNol
             _input = new Input(this);
             _victory = new Victory(this);
         }
+
+        //TODO Переименовать в PlayerCount
         [JsonProperty]
         public int SizePlayer { get; set; }
+
+        //TODO Переименовать в CurrentPlayer
         private int _countPlayer;
 
         [JsonProperty]
@@ -35,23 +40,26 @@ namespace KrestNol
             {
                 int bufValue = value;
                 if (bufValue >= SizePlayer)
-                    bufValue -= SizePlayer;
+                    bufValue = 0;
                 if (bufValue < 0)
-                    bufValue += SizePlayer;
+                    bufValue = SizePlayer - 1;
                 _countPlayer = bufValue + 48;
             }
         }
 
         [JsonProperty]
         public int SizePoleX { get; set; }
+
         [JsonProperty]
         public int SizePoleY { get; set; }
+
         [JsonProperty]
         public int SizePole { get; set; }
 
         [JsonProperty]
         public char[][] Pole { get; set; }
 
+        //TODO Переименовать в WinSequenceLength
         [JsonProperty]
         public int VRyd { get; set; }
 
@@ -73,7 +81,7 @@ namespace KrestNol
             }
             Console.Write("Введите число игроков: ");
             SizePlayer = _input.ConvertInt(Console.ReadLine());
-            while (SizePlayer < 1 || (SizePlayer > arSize.First() * arSize.Last() / VRyd))
+            while (SizePlayer < 1 || (SizePlayer > arSize.First()*arSize.Last()/VRyd))
             {
                 Console.WriteLine("Не верное число игроков");
                 SizePlayer = _input.ConvertInt(Console.ReadLine());
@@ -82,7 +90,7 @@ namespace KrestNol
             {
                 SizePoleX = arSize.First();
                 SizePoleY = arSize.Last();
-                SizePole = SizePoleX * SizePoleY;
+                SizePole = SizePoleX*SizePoleY;
             }
             CountPlayer = 0;
             Pole = new char[SizePoleY][];
@@ -107,13 +115,13 @@ namespace KrestNol
 
         public void StartGame()
         {
-            int[] pos;
             do
             {
                 DisplayPole();
                 Console.WriteLine("Ходит игрок " + CountPlayer.ToString(CultureInfo.InvariantCulture));
-                pos = _input.ConvertArrInt(Console.ReadLine());
-                while (pos == null || pos.First() < 0 || pos.First() >= SizePoleY || pos.Last() < 0 || pos.Last() >= SizePoleX)
+                int[] pos = _input.ConvertArrInt(Console.ReadLine());
+                while (pos == null || pos.First() < 0 || pos.First() >= SizePoleY || pos.Last() < 0 ||
+                       pos.Last() >= SizePoleX)
                 {
                     if (pos != null)
                         Console.WriteLine("Не верные координаты");
@@ -124,15 +132,15 @@ namespace KrestNol
                     Console.WriteLine("Ячейка занята");
                     pos = _input.ConvertArrInt(Console.ReadLine());
                 }
-                Pole[pos.First()][pos.Last()] = (char)_countPlayer;
+                Pole[pos.First()][pos.Last()] = (char) _countPlayer;
                 _victory.CalculateVictory(pos);
                 CountPlayer++;
             } while (!_victory.IsVictory);
             DisplayPole();
             if (_victory.IsVictoryPlayer)
-                Console.WriteLine("Попедил игрок № " + (CountPlayer - 1).ToString(CultureInfo.InvariantCulture));
+                Console.WriteLine("Победил игрок № " + (CountPlayer - 1).ToString(CultureInfo.InvariantCulture));
             else
-                Console.WriteLine("Нечья");
+                Console.WriteLine("Ничья");
             Console.ReadLine();
             Environment.Exit(0);
         }

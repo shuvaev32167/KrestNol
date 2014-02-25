@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace KrestNol
 {
@@ -34,6 +35,7 @@ namespace KrestNol
                     break;
             }
             return 0;
+            
         }
 
         public int[] ConvertArrInt(string input)
