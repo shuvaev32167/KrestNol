@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace KrestNol
 {
-    public class Vvod
+    public class Input
     {
         private Game _game;
 
-        public Vvod(Game g)
+        public Input(Game g)
         {
             _game = g;
         }

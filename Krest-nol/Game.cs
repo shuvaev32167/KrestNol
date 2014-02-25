@@ -14,13 +14,13 @@ namespace KrestNol
         {
             return new Game();
         }
-        private readonly Vvod _vvod;
+        private readonly Input _input;
 
         private readonly Victory _victory;
 
         public Game()
         {
-            _vvod = new Vvod(this);
+            _input = new Input(this);
             _victory = new Victory(this);
         }
         [JsonProperty]
@@ -58,25 +58,25 @@ namespace KrestNol
         public void NewGame()
         {
             Console.Write("Введите размер поля: ");
-            int[] arSize = _vvod.ConvertArrInt(Console.ReadLine());
+            int[] arSize = _input.ConvertArrInt(Console.ReadLine());
             while (arSize.First() < 2 || arSize.First() > 10 || arSize.Last() < 2 || arSize.Last() > 10)
             {
                 Console.WriteLine("Не верные размеры поля");
-                arSize = _vvod.ConvertArrInt(Console.ReadLine());
+                arSize = _input.ConvertArrInt(Console.ReadLine());
             }
             Console.Write("Введите число повторений в ряду: ");
-            VRyd = _vvod.ConvertInt(Console.ReadLine());
+            VRyd = _input.ConvertInt(Console.ReadLine());
             while (VRyd < 2 || (VRyd > arSize.First() || VRyd > arSize.Last()))
             {
                 Console.WriteLine("Не верное число повторений");
-                VRyd = _vvod.ConvertInt(Console.ReadLine());
+                VRyd = _input.ConvertInt(Console.ReadLine());
             }
             Console.Write("Введите число игроков: ");
-            SizePlayer = _vvod.ConvertInt(Console.ReadLine());
+            SizePlayer = _input.ConvertInt(Console.ReadLine());
             while (SizePlayer < 1 || (SizePlayer > arSize.First() * arSize.Last() / VRyd))
             {
                 Console.WriteLine("Не верное число игроков");
-                SizePlayer = _vvod.ConvertInt(Console.ReadLine());
+                SizePlayer = _input.ConvertInt(Console.ReadLine());
             }
             if (arSize != null)
             {
@@ -112,17 +112,17 @@ namespace KrestNol
             {
                 DisplayPole();
                 Console.WriteLine("Ходит игрок " + CountPlayer.ToString(CultureInfo.InvariantCulture));
-                pos = _vvod.ConvertArrInt(Console.ReadLine());
+                pos = _input.ConvertArrInt(Console.ReadLine());
                 while (pos == null || pos.First() < 0 || pos.First() >= SizePoleY || pos.Last() < 0 || pos.Last() >= SizePoleX)
                 {
                     if (pos != null)
                         Console.WriteLine("Не верные координаты");
-                    pos = _vvod.ConvertArrInt(Console.ReadLine());
+                    pos = _input.ConvertArrInt(Console.ReadLine());
                 }
                 while (Pole[pos.First()][pos.Last()] != ' ')
                 {
                     Console.WriteLine("Ячейка занята");
-                    pos = _vvod.ConvertArrInt(Console.ReadLine());
+                    pos = _input.ConvertArrInt(Console.ReadLine());
                 }
                 Pole[pos.First()][pos.Last()] = (char)_countPlayer;
                 _victory.CalculateVictory(pos);
