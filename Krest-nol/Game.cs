@@ -115,9 +115,11 @@ namespace KrestNol
             for (int i = 0; i < PlayerCount; ++i)
             {
                 Console.WriteLine("Введите имя "+i+"-го игрока");
+                string buf;
+                _input.ParseInput(Console.ReadLine(), out buf);
                 Players[i] = new Player
                 {
-                    NamePlayer = _input.ConvertToString(Console.ReadLine()),
+                    NamePlayer = buf,
                     SymbolPlayer = Convert.ToChar(i + 48)
                 };
             }

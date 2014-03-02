@@ -19,21 +19,20 @@ namespace KrestNol
         }
         public ParseAnswer ParseInput(string input, out int value)
         {
-            switch (input.Split(' ').First())
+            switch (input.Split(' ').First().ToLower())
             {
                 case "save":
-                case "Save":
-                case "SAVE":
                     ExternalFile.Save(input.Split(' ').Last(), _game);
                     value = 0;
                     return ParseAnswer.ActionExternalFile;
                 case "load":
-                case "Load":
-                case "LOAD":
                     ExternalFile.Load(input.Split(' ').Last(), ref _game);
                     _game.LoadGame();
                     value = 0;
                     return ParseAnswer.ActionExternalFile;
+                case "exit":
+                    Environment.Exit(0);
+                    break;
             }
             if (input.Split(' ').Count() == 1)
             {
@@ -47,21 +46,20 @@ namespace KrestNol
         public ParseAnswer ParseInput(string input, ref Point value)
         {
             string[] bufStrings = input.Split(' ');
-            switch (bufStrings.First())
+            switch (bufStrings.First().ToLower())
             {
                 case "save":
-                case "Save":
-                case "SAVE":
                     ExternalFile.Save(bufStrings.Last(), _game);
                     value = null;
                     return ParseAnswer.ActionExternalFile;
                 case "load":
-                case "Load":
-                case "LOAD":
                     ExternalFile.Load(input.Split(' ').Last(), ref _game);
                     _game.LoadGame();
                     value = null;
                     return ParseAnswer.ActionExternalFile;
+                case "exit":
+                    Environment.Exit(0);
+                    break;
             }
             if (input.Split(' ').Count() != 2)
             {
@@ -78,23 +76,25 @@ namespace KrestNol
             return ParseAnswer.Error;
         }
 
-        public string ConvertToString(string input)
+        public ParseAnswer ParseInput(string input, out string value)
         {
-            switch (input.Split(' ').First())
+            switch (input.Split(' ').First().ToLower())
             {
                 case "save":
-                case "Save":
-                case "SAVE":
                     ExternalFile.Save(input.Split(' ').Last(), _game);
-                    return "";
+                    value = "";
+                    return ParseAnswer.ActionExternalFile;
                 case "load":
-                case "Load":
-                case "LOAD":
                     ExternalFile.Load(input.Split(' ').Last(), ref _game);
                     _game.LoadGame();
-                    return "";
+                    value = "";
+                    return ParseAnswer.ActionExternalFile;
+                case "exit":
+                    Environment.Exit(0);
+                    break;
             }
-            return input; 
+            value = input;
+            return ParseAnswer.Ok; 
         }
     }
 }
