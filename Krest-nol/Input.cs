@@ -38,7 +38,7 @@ namespace KrestNol
             
         }
 
-        public int[] ConvertArrInt(string input)
+        public Point ConvertArrInt(string input)
         {
             if (input.Split(' ').Count() != 2) 
                 return null;
@@ -47,7 +47,7 @@ namespace KrestNol
             if (Int32.TryParse(buf.First(), out value[0]))
             {
                 Int32.TryParse(buf.Last(), out value[1]);
-                return value;
+                return new Point(value);
             }
             switch (buf.First())
             {

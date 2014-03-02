@@ -1,18 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 namespace KrestNol
 {
-    class Point
+    public class Point
     {
-        public int x { get; private set; }
-        public int y { get; private set; }
+        public int X { get; private set; }
+        public int Y { get; private set; }
         public Point(int x, int y)
         {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
+        }
+
+        public Point(int[] value)
+        {
+            if (value.Count() == 2)
+            {
+                X = value.Last();
+                Y = value.First();
+            }
         }
     }
 }

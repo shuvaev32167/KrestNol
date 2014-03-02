@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace KrestNol
+﻿namespace KrestNol
 {
     public class Victory
     {
@@ -10,97 +8,95 @@ namespace KrestNol
         }
         private readonly Game _game;
         public int ZapolnenostyPole { get; set; }
-        //TODO Переименовать Из IsVictory в IsEndOfGame
-        public bool IsVictory;
-        public bool IsVictoryPlayer;
+        public bool IsEndOfGame { get; private set; }
+        public bool IsVictoryPlayer { get; private set; }
 
-        public void CalculateVictory(int [] pos)
+        public void CalculateVictory(Point pos)
         {
             ++ZapolnenostyPole;
             
             int povtor = 1;
-            for (int i = pos.Last()+1; i < _game.SizePoleX; ++i)
+            for (int i = pos.X+1; i < _game.SizePole; ++i)
             {
-                if (_game.Pole[pos.First()][i] == _game.Pole[pos.First()][pos.Last()])
+                if (_game.Pole[pos.Y][i] == _game.Pole[pos.Y][pos.X])
                     ++povtor;
-                if (povtor < _game.VRyd) continue;
-                IsVictory = true;
+                if (povtor < _game.WinSequenceLength) continue;
+                IsEndOfGame = true;
                 IsVictoryPlayer = true;
                 return;
             }
-            for (int i = pos.Last()-1; i >= 0; --i)
+            for (int i = pos.X-1; i >= 0; --i)
             {
-                if (_game.Pole[pos.First()][i] == _game.Pole[pos.First()][pos.Last()])
+                if (_game.Pole[pos.Y][i] == _game.Pole[pos.Y][pos.X])
                     ++povtor;
-                if (povtor < _game.VRyd) continue;
-                IsVictory = true;
-                IsVictoryPlayer = true;
-                return;
-            }
-            
-            povtor = 1;
-            for (int i = pos.First()+1; i < _game.SizePoleY; ++i)
-            {
-                if (_game.Pole[i][pos.Last()] == _game.Pole[pos.First()][pos.Last()])
-                    ++povtor;
-                if (povtor < _game.VRyd) continue;
-                IsVictory = true;
-                IsVictoryPlayer = true;
-                return;
-            }
-            for (int i = pos.First()-1; i >= 0; --i)
-            {
-                if (_game.Pole[i][pos.Last()] == _game.Pole[pos.First()][pos.Last()])
-                    ++povtor;
-                if (povtor < _game.VRyd) continue;
-                IsVictory = true;
+                if (povtor < _game.WinSequenceLength) continue;
+                IsEndOfGame = true;
                 IsVictoryPlayer = true;
                 return;
             }
             
             povtor = 1;
-            for (int i = pos.First()+1, j = pos.Last()+1; i < _game.SizePoleY && j < _game.SizePoleX; ++i, ++j)
+            for (int i = pos.Y+1; i < _game.SizePole; ++i)
             {
-                if (_game.Pole[i][j] == _game.Pole[pos.First()][pos.Last()])
+                if (_game.Pole[i][pos.X] == _game.Pole[pos.Y][pos.X])
                     ++povtor;
-                if (povtor < _game.VRyd) continue;
-                IsVictory = true;
+                if (povtor < _game.WinSequenceLength) continue;
+                IsEndOfGame = true;
                 IsVictoryPlayer = true;
                 return;
             }
-            for (int i = pos.First()-1, j = pos.Last()-1; i >= 0 && j >= 0; --i, --j)
+            for (int i = pos.Y-1; i >= 0; --i)
             {
-                if (_game.Pole[i][j] == _game.Pole[pos.First()][pos.Last()])
+                if (_game.Pole[i][pos.X] == _game.Pole[pos.Y][pos.X])
                     ++povtor;
-                if (povtor < _game.VRyd) continue;
-                IsVictory = true;
+                if (povtor < _game.WinSequenceLength) continue;
+                IsEndOfGame = true;
                 IsVictoryPlayer = true;
                 return;
             }
             
             povtor = 1;
-            for (int i = pos.First()+1, j = pos.Last()-1; i < _game.SizePoleY && j >= 0; ++i, --j)
+            for (int i = pos.Y+1, j = pos.X+1; i < _game.SizePole && j < _game.SizePole; ++i, ++j)
             {
-                if (_game.Pole[i][j] == _game.Pole[pos.First()][pos.Last()])
+                if (_game.Pole[i][j] == _game.Pole[pos.Y][pos.X])
                     ++povtor;
-                if (povtor < _game.VRyd) continue;
-                IsVictory = true;
+                if (povtor < _game.WinSequenceLength) continue;
+                IsEndOfGame = true;
+                IsVictoryPlayer = true;
+                return;
+            }
+            for (int i = pos.Y-1, j = pos.X-1; i >= 0 && j >= 0; --i, --j)
+            {
+                if (_game.Pole[i][j] == _game.Pole[pos.Y][pos.X])
+                    ++povtor;
+                if (povtor < _game.WinSequenceLength) continue;
+                IsEndOfGame = true;
+                IsVictoryPlayer = true;
+                return;
+            }
+            
+            povtor = 1;
+            for (int i = pos.Y+1, j = pos.X-1; i < _game.SizePole && j >= 0; ++i, --j)
+            {
+                if (_game.Pole[i][j] == _game.Pole[pos.Y][pos.X])
+                    ++povtor;
+                if (povtor < _game.WinSequenceLength) continue;
+                IsEndOfGame = true;
+                IsVictoryPlayer = true;
+                return;
+            }
+            for (int i = pos.Y-1, j = pos.X+1; i >= 0 && j < _game.SizePole; --i, ++j)
+            {
+                if (_game.Pole[i][j] == _game.Pole[pos.Y][pos.X])
+                    ++povtor;
+                if (povtor < _game.WinSequenceLength) continue;
+                IsEndOfGame = true;
                 IsVictoryPlayer = true;
                 return;
             }
 
-            for (int i = pos.First()-1, j = pos.Last()+1; i >= 0 && j < _game.SizePoleX; --i, ++j)
-            {
-                if (_game.Pole[i][j] == _game.Pole[pos.First()][pos.Last()])
-                    ++povtor;
-                if (povtor < _game.VRyd) continue;
-                IsVictory = true;
-                IsVictoryPlayer = true;
-                return;
-            }
-           
-            if (_game.SizePole != ZapolnenostyPole) return;
-            IsVictory = true;
+            if (_game.SizePole * _game.SizePole != ZapolnenostyPole) return;
+            IsEndOfGame = true;
             IsVictoryPlayer = false;
         }
     }
