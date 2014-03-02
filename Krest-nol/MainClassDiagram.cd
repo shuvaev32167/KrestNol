@@ -3,7 +3,7 @@
   <Class Name="KrestNol.Game">
     <Position X="6.5" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAIAAAIAAAAAABAEAAAgBhAkAEAAACAAgAAAAAE=</HashCode>
+      <HashCode>QAAACAIAAAIAABAAABQEAAAgBxAkAEAAACAQgAAAAQE=</HashCode>
       <FileName>Game.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -17,7 +17,7 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAACAAgAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAQ=</HashCode>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAQ=</HashCode>
       <FileName>Input.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -31,19 +31,19 @@
   <Class Name="KrestNol.Victory">
     <Position X="3.75" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>gAAAAAAABAAAAgAAAAAAAAAAABAAAAAAAAAAAAAAAAQ=</HashCode>
+      <HashCode>gAAIAAAABAAAAgAAAAAAAAAAABAAAAAAAAAAAAAAAAQ=</HashCode>
       <FileName>Victory.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="KrestNol.Player">
-    <Position X="3.75" Y="3.25" Width="2.5" />
+    <Position X="3.75" Y="3.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAEACAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Player.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="KrestNol.Point">
-    <Position X="0.5" Y="4.5" Width="1.75" />
+    <Position X="0.5" Y="5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAA=</HashCode>
       <FileName>Point.cs</FileName>
