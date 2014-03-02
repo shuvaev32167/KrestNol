@@ -10,6 +10,11 @@ namespace KrestNol
     [JsonConverter(typeof (Game))]
     public class Game : CustomCreationConverter<Game>
     {
+        private const int ShiftAnsi = 48;
+        private const string HorizontalBorder = " -"; 
+        private const string VerticalBorder = "|";
+        private const int MaxPole = 10, MinPole = 2, MinPlayer = 1;
+        private const char DefaultCellsPole = ' ';
         public override Game Create(Type objectType)
         {
             return new Game();
@@ -62,7 +67,7 @@ namespace KrestNol
             Console.Write("Введите размер поля: ");
             int sizePole;
             Input.ParseAnswer parceAnsverResult = _input.ParseInput(Console.ReadLine(), out sizePole);
-            while (sizePole < 2 || sizePole > 10)
+            while (sizePole < MinPole || sizePole > MaxPole)
             {
                 if (parceAnsverResult == Input.ParseAnswer.Ok || parceAnsverResult == Input.ParseAnswer.Error)
                     Console.WriteLine("Не верные размеры поля");
@@ -78,7 +83,7 @@ namespace KrestNol
             Console.Write("Введите число повторений в ряду: ");
             int winSequenceLength;
             parceAnsverResult = _input.ParseInput(Console.ReadLine(), out winSequenceLength);
-            while (WinSequenceLength < 2 || WinSequenceLength > SizePole)
+            while (winSequenceLength < MinPole || winSequenceLength > SizePole)
             {
                 if (parceAnsverResult == Input.ParseAnswer.Ok || parceAnsverResult == Input.ParseAnswer.Error)
                     Console.WriteLine("Не верное число повторений");
@@ -94,7 +99,7 @@ namespace KrestNol
             Console.Write("Введите число игроков: ");
             int playerCount;
             parceAnsverResult = _input.ParseInput(Console.ReadLine(), out playerCount);
-            while (PlayerCount < 1 || PlayerCount > (SizePole*SizePole) / WinSequenceLength)
+            while (playerCount < MinPlayer || playerCount > (SizePole*SizePole) / WinSequenceLength)
             {
                 if (parceAnsverResult == Input.ParseAnswer.Ok || parceAnsverResult == Input.ParseAnswer.Error)
                     Console.WriteLine("Не верное число игроков");
@@ -116,8 +121,9 @@ namespace KrestNol
                 Players[i] = new Player
                 {
                     NamePlayer = buf,
-                    SymbolPlayer = Convert.ToChar(i + 48)
+                    SymbolPlayer = Convert.ToChar(i + ShiftAnsi)
                 };
+                Console.Clear();
             }
             CurrentPlayer = 0;
             Pole = new char[SizePole][];
@@ -125,7 +131,7 @@ namespace KrestNol
                 Pole[i] = new char[SizePole];
             for (int i = 0; i < SizePole; ++i)
                 for (int j = 0; j < SizePole; ++j)
-                    Pole[i][j] = ' ';
+                    Pole[i][j] = DefaultCellsPole;
             StartGame();
         }
 
@@ -134,7 +140,7 @@ namespace KrestNol
             int zapolPole = 0;
             for (int i = 0; i < SizePole; ++i)
                 for (int j = 0; j < SizePole; ++j)
-                    if (Pole[i][j] != ' ')
+                    if (Pole[i][j] != DefaultCellsPole)
                         ++zapolPole;
             _victory.ZapolnenostyPole = zapolPole;
             //_players = new Player[PlayerCount];
@@ -191,16 +197,16 @@ namespace KrestNol
         {
             Console.Clear();
             for (int j = 0; j < SizePole; ++j)
-                Console.Write(" -");
+                Console.Write(HorizontalBorder);
             Console.WriteLine();
             for (int i = 0; i < SizePole; ++i)
             {
-                Console.Write('|');
+                Console.Write(VerticalBorder);
                 for (int j = 0; j < SizePole; ++j)
-                    Console.Write(Pole[i][j] + "|");
+                    Console.Write(Pole[i][j] + VerticalBorder);
                 Console.WriteLine();
                 for (int j = 0; j < SizePole; ++j)
-                    Console.Write(" -");
+                    Console.Write(HorizontalBorder);
                 Console.WriteLine();
             }
         }
