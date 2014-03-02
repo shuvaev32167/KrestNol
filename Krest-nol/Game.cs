@@ -96,7 +96,7 @@ namespace KrestNol
             Console.Clear();
             WinSequenceLength = winSequenceLength;
             Console.Write("Введите число игроков: ");
-            int playerCount = PlayerCount;
+            int playerCount;
             parceAnsverResult = _input.ParseInput(Console.ReadLine(), out playerCount);
             while (PlayerCount < 1 || PlayerCount > (SizePole*SizePole) / WinSequenceLength)
             {
@@ -149,17 +149,31 @@ namespace KrestNol
             {
                 DisplayPole();
                 Console.WriteLine("Ходит " + Players[CurrentPlayer].NamePlayer);
-                Point pos = _input.ConvertArrInt(Console.ReadLine());
-                while (pos == null || pos.Y < 0 || pos.Y >= SizePole || pos.X < 0 || pos.X >= SizePole)
+                Point pos = null;
+                Input.ParseAnswer parceAnsverResult = _input.ParseInput(Console.ReadLine(), ref pos);
+                bool isNotCorrectCoordinats = pos == null || pos.Y < 0 || pos.Y >= SizePole || pos.X < 0 ||
+                                              pos.X >= SizePole;
+                bool isNotCorrectPos = false;
+                if (!isNotCorrectCoordinats)
+                    isNotCorrectPos = Pole[pos.Y][pos.X] != ' ';
+                while (isNotCorrectCoordinats || isNotCorrectPos)
                 {
-                    if (pos != null)
+                    if ((parceAnsverResult == Input.ParseAnswer.Ok || parceAnsverResult == Input.ParseAnswer.Error)&&
+                        isNotCorrectCoordinats)
                         Console.WriteLine("Не верные координаты");
-                    pos = _input.ConvertArrInt(Console.ReadLine());
-                }
-                while (Pole[pos.Y][pos.X] != ' ')
-                {
-                    Console.WriteLine("Ячейка занята");
-                    pos = _input.ConvertArrInt(Console.ReadLine());
+                    else
+                    {
+                        if (isNotCorrectPos)
+                        {
+                            Console.WriteLine("Ячейка занята");
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.Write("Ходит " + Players[CurrentPlayer].NamePlayer);
+                        }
+                    }
+                    parceAnsverResult = _input.ParseInput(Console.ReadLine(), ref pos);
                 }
                 Players[CurrentPlayer].MakeAMove(pos, Pole);
                 _victory.CalculateVictory(pos);

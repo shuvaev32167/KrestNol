@@ -44,32 +44,38 @@ namespace KrestNol
             return ParseAnswer.Error;   
         }
 
-        public Point ConvertArrInt(string input)
+        public ParseAnswer ParseInput(string input, ref Point value)
         {
-            if (input.Split(' ').Count() != 2) 
-                return null;
-            int[] value = new int[2];
-            string[] buf = input.Split(' ');
-            if (Int32.TryParse(buf.First(), out value[0]))
-            {
-                Int32.TryParse(buf.Last(), out value[1]);
-                return new Point(value);
-            }
-            switch (buf.First())
+            string[] bufStrings = input.Split(' ');
+            switch (bufStrings.First())
             {
                 case "save":
                 case "Save":
                 case "SAVE":
-                    ExternalFile.Save(buf.Last(), _game);
-                    break;
+                    ExternalFile.Save(bufStrings.Last(), _game);
+                    value = null;
+                    return ParseAnswer.ActionExternalFile;
                 case "load":
                 case "Load":
                 case "LOAD":
                     ExternalFile.Load(input.Split(' ').Last(), ref _game);
                     _game.LoadGame();
-                    break;
+                    value = null;
+                    return ParseAnswer.ActionExternalFile;
             }
-            return null;
+            if (input.Split(' ').Count() != 2)
+            {
+                value = null;
+                return ParseAnswer.ActionExternalFile;
+            }
+            int[] bufInts = new int[2];
+            if (Int32.TryParse(bufStrings.First(), out bufInts[0]))
+            {
+                Int32.TryParse(bufStrings.Last(), out bufInts[1]);
+                value = new Point(bufInts);
+                return ParseAnswer.Ok;
+            }
+            return ParseAnswer.Error;
         }
 
         public string ConvertToString(string input)
