@@ -11,88 +11,74 @@
         public bool IsEndOfGame { get; private set; }
         public bool IsVictoryPlayer { get; private set; }
 
+        private bool IsVictory(int y, int x, int startY, int startX, ref int povtor)
+        {
+            if (_game.Pole[y][x] == _game.Pole[startY][startX])
+                ++povtor;
+            if (povtor < _game.WinSequenceLength) return false;
+            IsEndOfGame = true;
+            IsVictoryPlayer = true;
+            return true;
+        }
+
         public void CalculateVictory(Point pos)
         {
             ++ZapolnenostyPole;
-            
+
+            //right
             int povtor = 1;
-            for (int i = pos.X+1; i < _game.SizePole; ++i)
+            for (int i = pos.X + 1; i < _game.SizePole; ++i)
             {
-                if (_game.Pole[pos.Y][i] == _game.Pole[pos.Y][pos.X])
-                    ++povtor;
-                if (povtor < _game.WinSequenceLength) continue;
-                IsEndOfGame = true;
-                IsVictoryPlayer = true;
-                return;
+                if (!IsVictory(pos.Y, i, pos.Y, pos.X, ref povtor))
+                    return;
             }
-            for (int i = pos.X-1; i >= 0; --i)
+            //left
+            for (int i = pos.X - 1; i >= 0; --i)
             {
-                if (_game.Pole[pos.Y][i] == _game.Pole[pos.Y][pos.X])
-                    ++povtor;
-                if (povtor < _game.WinSequenceLength) continue;
-                IsEndOfGame = true;
-                IsVictoryPlayer = true;
-                return;
+                if (!IsVictory(pos.Y, i, pos.Y, pos.X, ref povtor))
+                    return;
             }
-            
+
+            //down
             povtor = 1;
-            for (int i = pos.Y+1; i < _game.SizePole; ++i)
+            for (int i = pos.Y + 1; i < _game.SizePole; ++i)
             {
-                if (_game.Pole[i][pos.X] == _game.Pole[pos.Y][pos.X])
-                    ++povtor;
-                if (povtor < _game.WinSequenceLength) continue;
-                IsEndOfGame = true;
-                IsVictoryPlayer = true;
-                return;
+                if (!IsVictory(i, pos.X, pos.Y, pos.X, ref povtor))
+                    return;
             }
-            for (int i = pos.Y-1; i >= 0; --i)
+            //up
+            for (int i = pos.Y - 1; i >= 0; --i)
             {
-                if (_game.Pole[i][pos.X] == _game.Pole[pos.Y][pos.X])
-                    ++povtor;
-                if (povtor < _game.WinSequenceLength) continue;
-                IsEndOfGame = true;
-                IsVictoryPlayer = true;
-                return;
+                if (!IsVictory(i, pos.X, pos.Y, pos.X, ref povtor))
+                    return;
             }
-            
+
+            //down-right
             povtor = 1;
-            for (int i = pos.Y+1, j = pos.X+1; i < _game.SizePole && j < _game.SizePole; ++i, ++j)
+            for (int i = pos.Y + 1, j = pos.X + 1; i < _game.SizePole && j < _game.SizePole; ++i, ++j)
             {
-                if (_game.Pole[i][j] == _game.Pole[pos.Y][pos.X])
-                    ++povtor;
-                if (povtor < _game.WinSequenceLength) continue;
-                IsEndOfGame = true;
-                IsVictoryPlayer = true;
-                return;
+                if (!IsVictory(i, j, pos.Y, pos.X, ref povtor))
+                    return;
             }
-            for (int i = pos.Y-1, j = pos.X-1; i >= 0 && j >= 0; --i, --j)
+            //up-left
+            for (int i = pos.Y - 1, j = pos.X - 1; i >= 0 && j >= 0; --i, --j)
             {
-                if (_game.Pole[i][j] == _game.Pole[pos.Y][pos.X])
-                    ++povtor;
-                if (povtor < _game.WinSequenceLength) continue;
-                IsEndOfGame = true;
-                IsVictoryPlayer = true;
-                return;
+                if (!IsVictory(i, j, pos.Y, pos.X, ref povtor))
+                    return;
             }
-            
+
+            //down-left
             povtor = 1;
-            for (int i = pos.Y+1, j = pos.X-1; i < _game.SizePole && j >= 0; ++i, --j)
+            for (int i = pos.Y + 1, j = pos.X - 1; i < _game.SizePole && j >= 0; ++i, --j)
             {
-                if (_game.Pole[i][j] == _game.Pole[pos.Y][pos.X])
-                    ++povtor;
-                if (povtor < _game.WinSequenceLength) continue;
-                IsEndOfGame = true;
-                IsVictoryPlayer = true;
-                return;
+                if (!IsVictory(i, j, pos.Y, pos.X, ref povtor))
+                    return;
             }
-            for (int i = pos.Y-1, j = pos.X+1; i >= 0 && j < _game.SizePole; --i, ++j)
+            //up-right
+            for (int i = pos.Y - 1, j = pos.X + 1; i >= 0 && j < _game.SizePole; --i, ++j)
             {
-                if (_game.Pole[i][j] == _game.Pole[pos.Y][pos.X])
-                    ++povtor;
-                if (povtor < _game.WinSequenceLength) continue;
-                IsEndOfGame = true;
-                IsVictoryPlayer = true;
-                return;
+                if (!IsVictory(i, j, pos.Y, pos.X, ref povtor))
+                    return;
             }
 
             if (_game.SizePole * _game.SizePole != ZapolnenostyPole) return;
