@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -18,17 +19,10 @@ namespace KrestNol
 
         private readonly Victory _victory;
 
-        [JsonProperty]
-        private Player[] Players { get; set; }
-
-        //[JsonProperty]
-        //private Dictionary<int, string> DicPlayers { get; set; }
-
         public Game()
         {
             _input = new Input(this);
             _victory = new Victory(this);
-            //DicPlayers = new Dictionary<int, string>();
         }
 
         [JsonProperty]
@@ -39,7 +33,7 @@ namespace KrestNol
         [JsonProperty]
         private int CurrentPlayer
         {
-            get { return _currentPlayer; }
+            get { return _currentPlayer - 48; }
             set
             {
                 int bufValue = value;
@@ -47,7 +41,7 @@ namespace KrestNol
                     bufValue = 0;
                 if (bufValue < 0)
                     bufValue = PlayerCount - 1;
-                _currentPlayer = bufValue;
+                _currentPlayer = bufValue + 48;
             }
         }
 
@@ -78,20 +72,10 @@ namespace KrestNol
             }
             Console.Write("Введите число игроков: ");
             PlayerCount = _input.ConvertInt(Console.ReadLine());
-            while (PlayerCount < 1 || PlayerCount > (SizePole*SizePole) / WinSequenceLength)
+            while (PlayerCount < 1 || PlayerCount > SizePole / WinSequenceLength)
             {
                 Console.WriteLine("Не верное число игроков");
                 PlayerCount = _input.ConvertInt(Console.ReadLine());
-            }
-            Players = new Player[PlayerCount];
-            for (int i = 0; i < PlayerCount; ++i)
-            {
-                Console.WriteLine("Введите имя "+i+"-го игрока");
-                Players[i] = new Player
-                {
-                    NamePlayer = _input.ConvertToString(Console.ReadLine()),
-                    SymbolPlayer = Convert.ToChar(i + 48)
-                };
             }
             CurrentPlayer = 0;
             Pole = new char[SizePole][];
@@ -111,7 +95,6 @@ namespace KrestNol
                     if (Pole[i][j] != ' ')
                         ++zapolPole;
             _victory.ZapolnenostyPole = zapolPole;
-            //_players = new Player[PlayerCount];
             StartGame();
         }
 
@@ -120,7 +103,7 @@ namespace KrestNol
             do
             {
                 DisplayPole();
-                Console.WriteLine("Ходит " + Players[CurrentPlayer].NamePlayer);
+                Console.WriteLine("Ходит игрок " + CurrentPlayer.ToString(CultureInfo.InvariantCulture));
                 Point pos = _input.ConvertArrInt(Console.ReadLine());
                 while (pos == null || pos.Y < 0 || pos.Y >= SizePole || pos.X < 0 || pos.X >= SizePole)
                 {
@@ -133,14 +116,13 @@ namespace KrestNol
                     Console.WriteLine("Ячейка занята");
                     pos = _input.ConvertArrInt(Console.ReadLine());
                 }
-                Players[CurrentPlayer].MakeAMove(pos, Pole);
+                Pole[pos.Y][pos.X] = (char) _currentPlayer;
                 _victory.CalculateVictory(pos);
                 CurrentPlayer++;
             } while (!_victory.IsEndOfGame);
             DisplayPole();
             if (_victory.IsVictoryPlayer)
-                Console.WriteLine("Победил игрок № " + (--CurrentPlayer).ToString(CultureInfo.InvariantCulture)+"\n"+
-                    "С именем " +Players[CurrentPlayer].NamePlayer);
+                Console.WriteLine("Победил игрок № " + (CurrentPlayer - 1).ToString(CultureInfo.InvariantCulture));
             else
                 Console.WriteLine("Ничья");
             Console.ReadLine();

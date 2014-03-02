@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace KrestNol
 {
@@ -34,8 +33,7 @@ namespace KrestNol
                     _game.LoadGame();
                     break;
             }
-            return 0;
-            
+            return 0;   
         }
 
         public Point ConvertArrInt(string input)
@@ -64,6 +62,25 @@ namespace KrestNol
                     break;
             }
             return null;
+        }
+
+        public string ConvertToString(string input)
+        {
+            switch (input.Split(' ').First())
+            {
+                case "save":
+                case "Save":
+                case "SAVE":
+                    ExternalFile.Save(input.Split(' ').Last(), _game);
+                    return "";
+                case "load":
+                case "Load":
+                case "LOAD":
+                    ExternalFile.Load(input.Split(' ').Last(), ref _game);
+                    _game.LoadGame();
+                    return "";
+            }
+            return input; 
         }
     }
 }
