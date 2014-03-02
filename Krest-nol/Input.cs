@@ -5,35 +5,43 @@ namespace KrestNol
 {
     public class Input
     {
+        public enum ParseAnswer
+        {
+            Ok = 0,
+            Error=1,
+            ActionExternalFile=2
+        }
         private Game _game;
 
         public Input(Game g)
         {
             _game = g;
         }
-        public int ConvertInt(string input)
+        public ParseAnswer ParseInput(string input, out int value)
         {
-            if (input.Split(' ').Count() == 1)
-            {
-                int value;
-                Int32.TryParse(input, out value);
-                return value;
-            }
             switch (input.Split(' ').First())
             {
                 case "save":
                 case "Save":
                 case "SAVE":
                     ExternalFile.Save(input.Split(' ').Last(), _game);
-                    break;
+                    value = 0;
+                    return ParseAnswer.ActionExternalFile;
                 case "load":
                 case "Load":
                 case "LOAD":
                     ExternalFile.Load(input.Split(' ').Last(), ref _game);
                     _game.LoadGame();
-                    break;
+                    value = 0;
+                    return ParseAnswer.ActionExternalFile;
             }
-            return 0;   
+            if (input.Split(' ').Count() == 1)
+            {
+                //int value;
+                return Int32.TryParse(input, out value) ? ParseAnswer.Ok : ParseAnswer.Error;
+            }
+            value = 0;
+            return ParseAnswer.Error;   
         }
 
         public Point ConvertArrInt(string input)

@@ -9,8 +9,15 @@
   </Class>
   <Class Name="KrestNol.Input">
     <Position X="0.5" Y="2.25" Width="2.5" />
+    <NestedTypes>
+      <Enum Name="KrestNol.Input.ParseAnswer" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Input.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAgAAAAAAAQAAAAAAAAAAAAgAAAAAAAAAAAAAAQ=</HashCode>
+      <HashCode>AAACAAgAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAQ=</HashCode>
       <FileName>Input.cs</FileName>
     </TypeIdentifier>
   </Class>

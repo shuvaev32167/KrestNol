@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -63,26 +64,53 @@ namespace KrestNol
         public void NewGame()
         {
             Console.Write("Введите размер поля: ");
-            SizePole = _input.ConvertInt(Console.ReadLine());
-            while (SizePole < 2 || SizePole > 10)
+            int sizePole;
+            Input.ParseAnswer parceAnsverResult = _input.ParseInput(Console.ReadLine(), out sizePole);
+            while (sizePole < 2 || sizePole > 10)
             {
-                Console.WriteLine("Не верные размеры поля");
-                SizePole = _input.ConvertInt(Console.ReadLine());
+                if (parceAnsverResult == Input.ParseAnswer.Ok || parceAnsverResult == Input.ParseAnswer.Error)
+                    Console.WriteLine("Не верные размеры поля");
+                else
+                {
+                    Console.Clear();
+                    Console.Write("Введите размер поля: ");
+                }
+                parceAnsverResult = _input.ParseInput(Console.ReadLine(), out sizePole);
             }
+            SizePole = sizePole;
+            Console.Clear();
             Console.Write("Введите число повторений в ряду: ");
-            WinSequenceLength = _input.ConvertInt(Console.ReadLine());
+            int winSequenceLength;
+            parceAnsverResult = _input.ParseInput(Console.ReadLine(), out winSequenceLength);
             while (WinSequenceLength < 2 || WinSequenceLength > SizePole)
             {
-                Console.WriteLine("Не верное число повторений");
-                WinSequenceLength = _input.ConvertInt(Console.ReadLine());
+                if (parceAnsverResult == Input.ParseAnswer.Ok || parceAnsverResult == Input.ParseAnswer.Error)
+                    Console.WriteLine("Не верное число повторений");
+                else
+                {
+                    Console.Clear();
+                    Console.Write("Введите число повторений в ряду: ");
+                }
+                parceAnsverResult = _input.ParseInput(Console.ReadLine(), out winSequenceLength);
             }
+            Console.Clear();
+            WinSequenceLength = winSequenceLength;
             Console.Write("Введите число игроков: ");
-            PlayerCount = _input.ConvertInt(Console.ReadLine());
+            int playerCount = PlayerCount;
+            parceAnsverResult = _input.ParseInput(Console.ReadLine(), out playerCount);
             while (PlayerCount < 1 || PlayerCount > (SizePole*SizePole) / WinSequenceLength)
             {
-                Console.WriteLine("Не верное число игроков");
-                PlayerCount = _input.ConvertInt(Console.ReadLine());
+                if (parceAnsverResult == Input.ParseAnswer.Ok || parceAnsverResult == Input.ParseAnswer.Error)
+                    Console.WriteLine("Не верное число игроков");
+                else
+                {
+                    Console.Clear();
+                    Console.Write("Введите число игроков: ");
+                }
+                parceAnsverResult = _input.ParseInput(Console.ReadLine(), out playerCount);
             }
+            Console.Clear();
+            PlayerCount = playerCount;
             Players = new Player[PlayerCount];
             for (int i = 0; i < PlayerCount; ++i)
             {
