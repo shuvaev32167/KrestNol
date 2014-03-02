@@ -8,7 +8,6 @@ namespace KrestNol
         {
             Game game = new Game();
             game.NewGame();
-            Console.ReadLine();
         }
     }
 }
