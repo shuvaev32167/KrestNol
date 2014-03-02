@@ -13,28 +13,37 @@ namespace KrestNol
         }
         private Game _game;
 
+        private bool ActionExternalFile(string[] input)
+        {
+            switch (input.First().ToLower())
+            {
+                case "save":
+                    ExternalFile.Save(input.Last(), _game);
+                    return true;
+                case "load":
+                    ExternalFile.Load(input.Last(), ref _game);
+                    _game.LoadGame();
+                    return true;
+                case "exit":
+                    Environment.Exit(0);
+                    break;
+            }
+            return false;
+        }
+
         public Input(Game g)
         {
             _game = g;
         }
         public ParseAnswer ParseInput(string input, out int value)
         {
-            switch (input.Split(' ').First().ToLower())
+            string[] bufStrings = input.Split(' ');
+            if (ActionExternalFile(bufStrings))
             {
-                case "save":
-                    ExternalFile.Save(input.Split(' ').Last(), _game);
-                    value = 0;
-                    return ParseAnswer.ActionExternalFile;
-                case "load":
-                    ExternalFile.Load(input.Split(' ').Last(), ref _game);
-                    _game.LoadGame();
-                    value = 0;
-                    return ParseAnswer.ActionExternalFile;
-                case "exit":
-                    Environment.Exit(0);
-                    break;
+                value = 0;
+                return ParseAnswer.ActionExternalFile;
             }
-            if (input.Split(' ').Count() == 1)
+            if (bufStrings.Count() == 1)
             {
                 //int value;
                 return Int32.TryParse(input, out value) ? ParseAnswer.Ok : ParseAnswer.Error;
@@ -46,22 +55,12 @@ namespace KrestNol
         public ParseAnswer ParseInput(string input, ref Point value)
         {
             string[] bufStrings = input.Split(' ');
-            switch (bufStrings.First().ToLower())
+            if (ActionExternalFile(bufStrings))
             {
-                case "save":
-                    ExternalFile.Save(bufStrings.Last(), _game);
-                    value = null;
-                    return ParseAnswer.ActionExternalFile;
-                case "load":
-                    ExternalFile.Load(input.Split(' ').Last(), ref _game);
-                    _game.LoadGame();
-                    value = null;
-                    return ParseAnswer.ActionExternalFile;
-                case "exit":
-                    Environment.Exit(0);
-                    break;
+                value = null;
+                return ParseAnswer.ActionExternalFile;
             }
-            if (input.Split(' ').Count() != 2)
+            if (bufStrings.Count() != 2)
             {
                 value = null;
                 return ParseAnswer.ActionExternalFile;
@@ -78,20 +77,11 @@ namespace KrestNol
 
         public ParseAnswer ParseInput(string input, out string value)
         {
-            switch (input.Split(' ').First().ToLower())
+            string[] bufStrings = input.Split(' ');
+            if (ActionExternalFile(bufStrings))
             {
-                case "save":
-                    ExternalFile.Save(input.Split(' ').Last(), _game);
-                    value = "";
-                    return ParseAnswer.ActionExternalFile;
-                case "load":
-                    ExternalFile.Load(input.Split(' ').Last(), ref _game);
-                    _game.LoadGame();
-                    value = "";
-                    return ParseAnswer.ActionExternalFile;
-                case "exit":
-                    Environment.Exit(0);
-                    break;
+                value = "";
+                return ParseAnswer.ActionExternalFile;
             }
             value = input;
             return ParseAnswer.Ok; 

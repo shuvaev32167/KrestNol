@@ -22,14 +22,10 @@ namespace KrestNol
         [JsonProperty]
         private Player[] Players { get; set; }
 
-        //[JsonProperty]
-        //private Dictionary<int, string> DicPlayers { get; set; }
-
         public Game()
         {
             _input = new Input(this);
             _victory = new Victory(this);
-            //DicPlayers = new Dictionary<int, string>();
         }
 
         [JsonProperty]
