@@ -4,7 +4,7 @@ using System.IO;
 
 namespace KrestNol
 {
-    public class ExternalFile
+    public static class ExternalFile
     {
         public static void Save(string put, Game data)
         {
