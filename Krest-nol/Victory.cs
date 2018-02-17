@@ -29,13 +29,13 @@
             int povtor = 1;
             for (int i = pos.X + 1; i < _game.SizePole; ++i)
             {
-                if (!IsVictory(pos.Y, i, pos.Y, pos.X, ref povtor))
+                if (IsVictory(pos.Y, i, pos.Y, pos.X, ref povtor))
                     return;
             }
             //left
             for (int i = pos.X - 1; i >= 0; --i)
             {
-                if (!IsVictory(pos.Y, i, pos.Y, pos.X, ref povtor))
+                if (IsVictory(pos.Y, i, pos.Y, pos.X, ref povtor))
                     return;
             }
 
@@ -43,13 +43,13 @@
             povtor = 1;
             for (int i = pos.Y + 1; i < _game.SizePole; ++i)
             {
-                if (!IsVictory(i, pos.X, pos.Y, pos.X, ref povtor))
+                if (IsVictory(i, pos.X, pos.Y, pos.X, ref povtor))
                     return;
             }
             //up
             for (int i = pos.Y - 1; i >= 0; --i)
             {
-                if (!IsVictory(i, pos.X, pos.Y, pos.X, ref povtor))
+                if (IsVictory(i, pos.X, pos.Y, pos.X, ref povtor))
                     return;
             }
 
@@ -57,13 +57,13 @@
             povtor = 1;
             for (int i = pos.Y + 1, j = pos.X + 1; i < _game.SizePole && j < _game.SizePole; ++i, ++j)
             {
-                if (!IsVictory(i, j, pos.Y, pos.X, ref povtor))
+                if (IsVictory(i, j, pos.Y, pos.X, ref povtor))
                     return;
             }
             //up-left
             for (int i = pos.Y - 1, j = pos.X - 1; i >= 0 && j >= 0; --i, --j)
             {
-                if (!IsVictory(i, j, pos.Y, pos.X, ref povtor))
+                if (IsVictory(i, j, pos.Y, pos.X, ref povtor))
                     return;
             }
 
@@ -71,13 +71,13 @@
             povtor = 1;
             for (int i = pos.Y + 1, j = pos.X - 1; i < _game.SizePole && j >= 0; ++i, --j)
             {
-                if (!IsVictory(i, j, pos.Y, pos.X, ref povtor))
+                if (IsVictory(i, j, pos.Y, pos.X, ref povtor))
                     return;
             }
             //up-right
             for (int i = pos.Y - 1, j = pos.X + 1; i >= 0 && j < _game.SizePole; --i, ++j)
             {
-                if (!IsVictory(i, j, pos.Y, pos.X, ref povtor))
+                if (IsVictory(i, j, pos.Y, pos.X, ref povtor))
                     return;
             }
 
